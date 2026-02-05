@@ -1,2 +1,1 @@
-# so_long
-42 so_long project about creating a 2D game in C
+*This project has been created as part of the 42 curriculum by ansimonn*
