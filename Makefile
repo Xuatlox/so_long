@@ -1,5 +1,6 @@
 .PHONY : all clean fclean re
-SRC = so_long.c
+SRC = so_long.c \
+		map.c
 OBJ_DIR = obj/
 NAME = so_long
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
