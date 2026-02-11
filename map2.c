@@ -6,105 +6,102 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 13:19:03 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/10 18:00:28 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:53:25 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
-
 #include "so_long.h"
 
-void	error(const char *message, char *map)
+void	error(const char *message, char **map)
 {
 	perror(message);
 	if (map)
+	{
+		while (*map)
+		{
+			free(*map);
+			++map;
+		}
 		free(map);
+	}
 	exit(EXIT_FAILURE);
 }
 
-void	check_rect(char *map)
+void	check_rect(char **tileset, const int len)
 {
 	int	i;
 	int	j;
-	int	len;
 
-	len = 0;
-	i = -1;
-	while (map[++i] != '\n')
-		len++;
-	j = 0;
-	while (map[++i])
+	j = 1;
+	while (tileset[j])
 	{
-		if (map[i] == '\n')
-		{
-			if (j != len)
-				error("Map is not a rectangle", map);
-			j = 0;
-		}
+		i = 0;
+		while (tileset[j][i])
+			++i;
+		if (i != len)
+			error("Map is not a rectangle", tileset);
 		++j;
 	}
 }
 
-void	check_walls(char *map)
+void	check_walls(char **tileset, int len)
 {
 	int	i;
 
 	i = -1;
-	while (map[++i] != '\n')
+	while (tileset[0][++i])
 	{
-		if (map[i] != '1')
-			error("Map is not surrounded by walls", map);
+		if (tileset[0][i] != '1')
+			error("Map is not surrounded by walls", tileset);
 	}
-	while (map[++i])
+	i = 0;
+	while (tileset[++i])
 	{
-		if (map[i] == '\n' && map[i + 1] &&
-			(map[i + 1] != '1' || map[i - 1] != '1'))
-			error("Map is not surrounded by walls", map);
+		if (tileset[i][0] != '1' || tileset[i][len - 1] != '1')
+			error("Map is not surrounded by walls", tileset);
 	}
-	while (map[--i] != '\n')
+	len = -1;
+	while (tileset[i - 1][++len])
 	{
-		if (map[i] != '1')
-			error("Map is not surrounded by walls", map);
+		if (tileset[i - 1][len] != '1')
+			error("Map is not surrounded by walls", tileset);
 	}
 }
 
-void	check_charset(char *map)
+void	check_charset(char **map)
 {
-	while (*map)
+	int	i;
+	int	j;
+
+	i = 0;
+	while (map[i])
 	{
-		if (*map != '0' && *map != '1' && *map != 'E'
-			&& *map != 'P' && *map != 'C')
+		j = 0;
+		while (map[i][j])
 		{
-			error("Invalid character in map", map);
+			if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'E'
+				&& map[i][j] != 'P' && map[i][j] != 'C')
+			{
+				error("Invalid character in map", map);
+			}
+			++j;
 		}
-		++map;
+		++i;
 	}
 }
 
-char	check_path(char *map, int len, int pos, int col)
+int	check_path(char **tileset, int pos[2], int obj)
 {
-	if (map[pos] == 'E')
+	if (tileset[pos[0]][pos[1]] == '1')
+		return (0);
+	if (tileset[pos[0]][pos[1]] == 'C')
+		--obj;
+	if (tileset[pos[0]][pos[1]] == 'E' && !obj)
 		return (1);
-	if (!col)
-	{
-		if (map[pos + 1] == '0' || map[pos + 1] == 'C')
-			check_path(map, len, pos + 1, col);
-		if (pos - 1 >= 0 && (map[pos - 1] == '0' || map[pos - 1] == 'C'))
-			check_path(map, len, pos - 1, col);
-		if (map[pos + len] == '0' || map[pos + len] == 'C')
-			check_path(map, len, pos + len, col);
-		if (pos - len >= 0 && (map[pos - len] == '0' || map[pos - len] == 'C'))
-			check_path(map, len, pos - len, col);
-	}
-	else
-	{
-		if (map[pos + 1] == '0' || map[pos + 1] == 'E')
-			check_path(map, len, pos + 1, col);
-		if (pos - 1 >= 0 && (map[pos - 1] == '0' || map[pos - 1] == 'E'))
-			check_path(map, len, pos - 1, col);
-		if (map[pos + len] == '0' || map[pos + len] == 'E')
-			check_path(map, len, pos + len, col);
-		if (pos - len >= 0 && (map[pos - len] == '0' || map[pos - len] == 'E'))
-			check_path(map, len, pos - len, col);
-	}
+	if (check_path(tileset, pos[0], pos[1] + 1, obj) ||
+		check_path(tileset, pos[0], pos[1] - 1, obj) ||
+		check_path(tileset, pos[0] + 1, pos[1], obj) ||
+		check_path(tileset, pos[0] - 1, pos[1], obj))
+		return (1);
+	return (0);
 }

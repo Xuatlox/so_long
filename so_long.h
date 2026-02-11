@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 17:18:47 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/10 18:57:32 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/11 17:35:31 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,15 @@ typedef struct mlx_s
 } mlx_t;
 
 void	display_map(char *map);
-void	check_rect(char **tileset);
-void	check_walls(char **tileset);
-void	error(const char *message, char *map);
+void	check_rect(char **tileset, int len);
+void	check_walls(char **tileset, int len);
+void	error(const char *message, char **map);
 int		get_len(const char *map);
-void	check_charset(char *map);
+void	check_charset(char **map);
 int		ft_strlen(char *str);
+char	**ft_split(char const *s, char c);
+void	*ft_calloc(size_t nmemb, size_t size);
+char	**desalloc(char **res, int i);
+char	check_path(char **tileset, int pos[2], int obj);
 
 #endif
