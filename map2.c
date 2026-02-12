@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 13:19:03 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/11 16:53:25 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/12 16:40:24 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,10 @@
 
 void	error(const char *message, char **map)
 {
+	write(STDERR_FILENO, "Error\n", 6);
 	perror(message);
 	if (map)
-	{
-		while (*map)
-		{
-			free(*map);
-			++map;
-		}
-		free(map);
-	}
+		desalloc(map);
 	exit(EXIT_FAILURE);
 }
 
@@ -90,18 +84,18 @@ void	check_charset(char **map)
 	}
 }
 
-int	check_path(char **tileset, int pos[2], int obj)
+int	check_path(char **tileset, const int pos_x, const int pos_y)
 {
-	if (tileset[pos[0]][pos[1]] == '1')
+	int	ret;
+
+	ret = 0;
+	if (tileset[pos_y][pos_x] == '1')
 		return (0);
-	if (tileset[pos[0]][pos[1]] == 'C')
-		--obj;
-	if (tileset[pos[0]][pos[1]] == 'E' && !obj)
-		return (1);
-	if (check_path(tileset, pos[0], pos[1] + 1, obj) ||
-		check_path(tileset, pos[0], pos[1] - 1, obj) ||
-		check_path(tileset, pos[0] + 1, pos[1], obj) ||
-		check_path(tileset, pos[0] - 1, pos[1], obj))
-		return (1);
-	return (0);
+	if (tileset[pos_y][pos_x] == 'C' || tileset[pos_y][pos_x] == 'E')
+		ret = 1;
+	tileset[pos_y][pos_x] = '1';
+	return (check_path(tileset, pos_x + 1, pos_y) +
+		check_path(tileset, pos_x - 1, pos_y) +
+		check_path(tileset, pos_x, pos_y + 1) +
+		check_path(tileset, pos_x, pos_y - 1) + ret);
 }

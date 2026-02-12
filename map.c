@@ -6,24 +6,24 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:45:40 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/11 18:05:20 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/12 16:24:27 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static void	ft_realloc(char **old, const int size)
+static void	ft_realloc(char ***old, const int size)
 {
-	char	*new;
+	char	**new;
 	int	i;
 
 	if (!old || !*old)
 		return ;
 	i = 0;
-	new = ft_calloc(size + 1, sizeof(char));
+	new = ft_calloc(size + 1, sizeof(char *));
 	if (!new)
 	{
-		free(*old);
+		desalloc(*old);
 		exit(EXIT_FAILURE);
 	}
 	while ((*old)[i] && i < size)
@@ -35,9 +35,9 @@ static void	ft_realloc(char **old, const int size)
 	*old = new;
 }
 
-static void fill_map(char **content, const char *map)
+static void fill_map(char ***content, const char *map)
 {
-	int		ret;
+	char	*ret;
 	int		i;
 	int		fd;
 
@@ -45,16 +45,18 @@ static void fill_map(char **content, const char *map)
 	if (fd < 0)
 		error("Can't open map file", NULL);
 	i = 0;
-	ret = 1;
-	*content = ft_calloc(1, sizeof(char));
+	ret = "1";
+	*content = ft_calloc(1, sizeof(char *));
 	if (!*content)
-		error("Malloc error (Map)", NULL);
-	while (ret > 0)
+		error("Malloc error", NULL);
+	while (ret)
 	{
 		ft_realloc(content, i + 1);
-		ret = read(fd, &(*content)[i], 1);
-		if (ret < 0)
-			error("Read error", content);
+		ret = get_next_line(fd);
+		if (!ret)
+			break ;
+		ret[ft_strlen(ret)] = 0;
+		(*content)[i] = ret;
 		++i;
 	}
 }
@@ -100,8 +102,8 @@ void	find_start(char **map, int pos[2])
 		{
 			if (map[i][j] == 'P')
 			{
-				pos[0] = i;
-				pos[1] = j;
+				pos[0] = j;
+				pos[1] = i;
 				return ;
 			}
 			++j;
@@ -110,17 +112,15 @@ void	find_start(char **map, int pos[2])
 	}
 }
 
-void display_map(char *map)
+char	**check_map(char *map)
 {
-	char	*content;
+	char	**tmp;
 	char	**tileset;
 	int		len;
 	int		pos[2];
 	int		obj;
 
-	fill_map(&content, map);
-	tileset = ft_split(content, '\n');
-	free(content);
+	fill_map(&tileset, map);
 	len = ft_strlen(tileset[0]);
 	check_charset(tileset);
 	check_char(tileset, 'P');
@@ -129,6 +129,12 @@ void display_map(char *map)
 	check_rect(tileset, len);
 	check_walls(tileset, len);
 	find_start(tileset, pos);
-	if (obj != check_path(, pos, obj))
-		error("No escape path found", tileset);
+	tmp = ft_ardup(tileset);
+	if (check_path(tmp, pos[0], pos[1]) != obj + 1)
+	{
+		desalloc(tileset);
+		error("No correct escape path", tmp);
+	}
+	desalloc(tmp);
+	return (tileset);
 }
