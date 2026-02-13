@@ -1,5 +1,6 @@
 .PHONY : all clean fclean re
 SRC = so_long.c \
+		so_long_utils.c \
 		map.c \
 		map2.c \
 		ft_strlen.c \
