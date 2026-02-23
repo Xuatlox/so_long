@@ -6,13 +6,13 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 10:53:32 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/13 17:12:45 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:21:49 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static void	draw_tilemap(const mlx_t mlx)
+void	draw_tilemap(const mlx_t mlx)
 {
 	int	i;
 	int	j;
@@ -27,8 +27,6 @@ static void	draw_tilemap(const mlx_t mlx)
 				mlx_put_image_to_window(mlx.con, mlx.win, mlx.wall, j, i);
 			else if (mlx.tileset[i / TILESIZE][j / TILESIZE] == 'P')
 				mlx_put_image_to_window(mlx.con, mlx.win, mlx.player, j, i);
-			else if (mlx.tileset[i / TILESIZE][j / TILESIZE] == '0')
-				mlx_put_image_to_window(mlx.con, mlx.win, mlx.bg, j, i);
 			else if (mlx.tileset[i / TILESIZE][j / TILESIZE] == 'E')
 				mlx_put_image_to_window(mlx.con, mlx.win, mlx.exit, j, i);
 			else if (mlx.tileset[i / TILESIZE][j / TILESIZE] == 'C')
@@ -39,16 +37,21 @@ static void	draw_tilemap(const mlx_t mlx)
 	}
 }
 
-void	display_images(const mlx_t mlx)
+void	draw_score(const mlx_t mlx)
 {
-	draw_tilemap(mlx);
+	char	*score;
+
+	score = ft_itoa(mlx.score);
+	if (!score)
+		return ;
+	mlx_string_put(mlx.con, mlx.win, 15, 15, mlx.bg, score);
+	free(score);
 }
 
 void	free_destroy_all(mlx_t *mlx, mlx_window_create_info *info)
 {
 	desalloc(mlx->tileset);
 	mlx_destroy_image(mlx->con, mlx->player);
-	mlx_destroy_image(mlx->con, mlx->bg);
 	mlx_destroy_image(mlx->con, mlx->exit);
 	mlx_destroy_image(mlx->con, mlx->col);
 	mlx_destroy_image(mlx->con, mlx->wall);

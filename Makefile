@@ -6,7 +6,8 @@ SRC = so_long.c \
 		ft_strlen.c \
 		ft_ardup.c \
 		get_next_line.c \
-		get_next_line_utils.c
+		get_next_line_utils.c \
+		ft_itoa.c
 OBJ_DIR = obj/
 NAME = so_long
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

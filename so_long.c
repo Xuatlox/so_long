@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 17:16:28 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/13 17:32:15 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:22:08 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,15 @@ static void	key_hook(const int key, void *param)
 		move(mlx, 1, X);
 }
 
-#include <stdio.h>
-
 static void	update(void *param)
 {
 	mlx_t	mlx;
 
 	mlx = *(mlx_t *) param;
-	display_images(mlx);
+	mlx.bg.rgba = 0x00000000;
+	mlx_clear_window(mlx.con, mlx.win, mlx.bg);
+	draw_tilemap(mlx);
+	draw_score(mlx);
 }
 
 static void	init(mlx_t **mlx, mlx_window_create_info **info, char **av)
@@ -56,8 +57,8 @@ static void	init(mlx_t **mlx, mlx_window_create_info **info, char **av)
 		exit(EXIT_FAILURE);
 	(*mlx)->con = mlx_init();
 	(*info)->title = "So Long";
-	(*info)->width = 1920;
-	(*info)->height = 1080;
+	(*info)->width = 520;
+	(*info)->height = 300;
 	(*mlx)->win = mlx_new_window((*mlx)->con, *info);
 	(*mlx)->tileset = check_map(av[1]);
 	find_start((*mlx)->tileset, (*mlx)->play_pos);
@@ -65,7 +66,8 @@ static void	init(mlx_t **mlx, mlx_window_create_info **info, char **av)
 	(*mlx)->wall = mlx_new_image_from_file((*mlx)->con, "white.png", &s, &s);
 	(*mlx)->col = mlx_new_image_from_file((*mlx)->con, "yellow.png", &s, &s);
 	(*mlx)->exit = mlx_new_image_from_file((*mlx)->con, "blue.png", &s, &s);
-	(*mlx)->bg = mlx_new_image_from_file((*mlx)->con, "black.png", &s, &s);
+	(*mlx)->bg.rgba = 0x00000000;
+	(*mlx)->score = 0;
 }
 
 int	main(const int ac, char **av)

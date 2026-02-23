@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 10:38:54 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/12 15:44:18 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:06:44 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,6 @@ static	int	ar_size(char **ar)
 		++ar;
 	}
 	return (size);
-}
-
-static char	*ft_strdup(char *s)
-{
-	char	*dup;
-	int		i;
-
-	dup = ft_calloc(ft_strlen(s) + 1, sizeof(char));
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (s[i])
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	return (dup);
 }
 
 char	**ft_ardup(char **ar)
