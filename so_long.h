@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 17:18:47 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/23 16:22:27 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/25 17:41:08 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,18 @@ typedef struct mlx_s
 	mlx_image col;
 	mlx_image exit;
 	mlx_color bg;
+	mlx_color text;
 	int	play_pos[2];
-	int	score;
+	int	moves;
+	int col_left;
+	mlx_window_create_info info;
 } mlx_t;
 
-# define TILESIZE 30
+# define TILESIZE 16
 # define X 0
 # define Y 1
 
-char	**check_map(char *map);
+char	**check_map(const char *map, mlx_t *mlx);
 void	check_rect(char **tileset, int len);
 void	check_walls(char **tileset, int len);
 void	error(const char *message, char **map);
@@ -49,7 +52,7 @@ void	*ft_calloc(size_t nmemb, size_t size);
 int		check_path(char **tileset, int pos_x, int pos_y);
 char	**ft_ardup(char **ar);
 char	*get_next_line(int fd);
-void	free_destroy_all(mlx_t *mlx, mlx_window_create_info *info);
+void	free_destroy_all(mlx_t *mlx);
 void	find_start(char **map, int pos[2]);
 void	move(mlx_t *mlx, int dir, int coord);
 void	draw_tilemap(mlx_t mlx);

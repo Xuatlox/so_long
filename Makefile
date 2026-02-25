@@ -23,7 +23,7 @@ $(NAME) : $(OBJ)
 $(OBJ) : $(SRC)
 	cd $(OBJ_DIR) && $(CC) $(CFLAGS)  -c $(addprefix ../, $(SRC))
 
-clean : $(OBJ)
+clean :
 	rm -rf $(OBJ)
 
 fclean : clean

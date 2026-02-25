@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 17:16:28 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/23 16:22:08 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/25 17:28:23 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,52 +35,53 @@ static void	key_hook(const int key, void *param)
 		move(mlx, 1, X);
 }
 
-static void	update(void *param)
+static void	init(mlx_t **mlx, char **av)
 {
-	mlx_t	mlx;
+	int	height;
 
-	mlx = *(mlx_t *) param;
-	mlx.bg.rgba = 0x00000000;
-	mlx_clear_window(mlx.con, mlx.win, mlx.bg);
-	draw_tilemap(mlx);
-	draw_score(mlx);
+	*mlx = ft_calloc(1, sizeof(mlx_t));
+	(*mlx)->con = mlx_init();
+	if (!(*mlx)->con)
+		free_destroy_all(*mlx);
+	(*mlx)->tileset = check_map(av[1], *mlx);
+	(*mlx)->info.title = "So Long";
+	(*mlx)->info.width = TILESIZE * ft_strlen((*mlx)->tileset[0]);
+	height = 0;
+	while ((*mlx)->tileset[height])
+		++height;
+	(*mlx)->info.height = height * TILESIZE;
+	(*mlx)->win = mlx_new_window((*mlx)->con, &(*mlx)->info);
+	find_start((*mlx)->tileset, (*mlx)->play_pos);
+	(*mlx)->player = mlx_new_image_from_file((*mlx)->con, "player.png", NULL, NULL);
+	(*mlx)->wall = mlx_new_image_from_file((*mlx)->con, "wall.png", NULL, NULL);
+	(*mlx)->col = mlx_new_image_from_file((*mlx)->con, "coin.png", NULL, NULL);
+	(*mlx)->exit = mlx_new_image_from_file((*mlx)->con, "exit.png", NULL, NULL);
+	if (!(*mlx)->exit || !(*mlx)->col || !(*mlx)->wall || !(*mlx)->player || !(*mlx)->win)
+		free_destroy_all(*mlx);
+	(*mlx)->bg.rgba = 0x00000000;
+	(*mlx)->text.rgba = 0x00d9901a;
+	(*mlx)->moves = 0;
 }
 
-static void	init(mlx_t **mlx, mlx_window_create_info **info, char **av)
+static void	update(void *param)
 {
-	int	s;
+	mlx_t mlx;
 
-	s = TILESIZE;
-	*mlx = ft_calloc(1, sizeof(mlx_t));
-	*info = ft_calloc(1, sizeof(mlx_window_create_info));
-	if (!(*info))
-		exit(EXIT_FAILURE);
-	(*mlx)->con = mlx_init();
-	(*info)->title = "So Long";
-	(*info)->width = 520;
-	(*info)->height = 300;
-	(*mlx)->win = mlx_new_window((*mlx)->con, *info);
-	(*mlx)->tileset = check_map(av[1]);
-	find_start((*mlx)->tileset, (*mlx)->play_pos);
-	(*mlx)->player = mlx_new_image_from_file((*mlx)->con, "green.png", &s, &s);
-	(*mlx)->wall = mlx_new_image_from_file((*mlx)->con, "white.png", &s, &s);
-	(*mlx)->col = mlx_new_image_from_file((*mlx)->con, "yellow.png", &s, &s);
-	(*mlx)->exit = mlx_new_image_from_file((*mlx)->con, "blue.png", &s, &s);
-	(*mlx)->bg.rgba = 0x00000000;
-	(*mlx)->score = 0;
+	mlx = *(mlx_t *) param;
+	mlx_clear_window(mlx.con, mlx.win, mlx.bg);
+	draw_tilemap(mlx);
 }
 
 int	main(const int ac, char **av)
 {
 	mlx_t	*mlx;
-	mlx_window_create_info	*info;
 
 	if (ac != 2)
 		return (0);
-	init(&mlx, &info, av);
+	init(&mlx, av);
 	mlx_on_event(mlx->con, mlx->win, MLX_KEYDOWN, key_hook, mlx);
 	mlx_on_event(mlx->con, mlx->win, MLX_WINDOW_EVENT, window_hook, mlx->con);
 	mlx_add_loop_hook(mlx->con, update, mlx);
 	mlx_loop(mlx->con);
-	free_destroy_all(mlx, info);
+	free_destroy_all(mlx);
 }

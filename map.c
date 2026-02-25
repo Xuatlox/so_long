@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:45:40 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/12 16:24:27 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/02/24 16:00:07 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,25 +112,24 @@ void	find_start(char **map, int pos[2])
 	}
 }
 
-char	**check_map(char *map)
+char	**check_map(const char *map, mlx_t *mlx)
 {
 	char	**tmp;
 	char	**tileset;
 	int		len;
 	int		pos[2];
-	int		obj;
 
 	fill_map(&tileset, map);
 	len = ft_strlen(tileset[0]);
 	check_charset(tileset);
 	check_char(tileset, 'P');
 	check_char(tileset, 'E');
-	obj = check_char(tileset, 'C');
+	mlx->col_left = check_char(tileset, 'C');
 	check_rect(tileset, len);
 	check_walls(tileset, len);
 	find_start(tileset, pos);
 	tmp = ft_ardup(tileset);
-	if (check_path(tmp, pos[0], pos[1]) != obj + 1)
+	if (check_path(tmp, pos[0], pos[1]) != mlx->col_left + 1)
 	{
 		desalloc(tileset);
 		error("No correct escape path", tmp);
