@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:45:40 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/24 16:00:07 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/04 18:19:53 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	ft_realloc(char ***old, const int size)
 {
 	char	**new;
-	int	i;
+	int		i;
 
 	if (!old || !*old)
 		return ;
@@ -35,7 +35,7 @@ static void	ft_realloc(char ***old, const int size)
 	*old = new;
 }
 
-static void fill_map(char ***content, const char *map)
+static void	fill_map(char ***content, const char *map)
 {
 	char	*ret;
 	int		i;
@@ -61,7 +61,7 @@ static void fill_map(char ***content, const char *map)
 	}
 }
 
-static int check_char(char **map, const char c)
+static int	check_char(char **map, const char c)
 {
 	int	count;
 	int	i;
@@ -112,7 +112,7 @@ void	find_start(char **map, int pos[2])
 	}
 }
 
-char	**check_map(const char *map, mlx_t *mlx)
+char	**check_map(int *col_left, const char *map)
 {
 	char	**tmp;
 	char	**tileset;
@@ -124,12 +124,12 @@ char	**check_map(const char *map, mlx_t *mlx)
 	check_charset(tileset);
 	check_char(tileset, 'P');
 	check_char(tileset, 'E');
-	mlx->col_left = check_char(tileset, 'C');
+	*col_left = check_char(tileset, 'C');
 	check_rect(tileset, len);
 	check_walls(tileset, len);
 	find_start(tileset, pos);
 	tmp = ft_ardup(tileset);
-	if (check_path(tmp, pos[0], pos[1]) != mlx->col_left + 1)
+	if (check_path(tmp, pos[0], pos[1]) != *col_left + 1)
 	{
 		desalloc(tileset);
 		error("No correct escape path", tmp);

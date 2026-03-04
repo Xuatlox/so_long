@@ -6,11 +6,11 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 18:28:19 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/02/10 18:30:29 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/04 18:09:12 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
 	int	i;
 

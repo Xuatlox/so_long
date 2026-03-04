@@ -6,11 +6,11 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 10:53:32 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:19:17 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/04 18:08:52 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "so_long_bonus.h"
 
 void	draw_tilemap(const t_mlx mlx)
 {
@@ -23,6 +23,8 @@ void	draw_tilemap(const t_mlx mlx)
 		j = 0;
 		while (mlx.tileset[i / TILESIZE][j / TILESIZE])
 		{
+			if (mlx.tileset[i / TILESIZE][j / TILESIZE] == 'X')
+				mlx_put_image_to_window(mlx.con, mlx.win, mlx.enemy, j, i);
 			if (mlx.tileset[i / TILESIZE][j / TILESIZE] == 'P')
 				mlx_put_image_to_window(mlx.con, mlx.win, mlx.player, j, i);
 			if (mlx.tileset[i / TILESIZE][j / TILESIZE] == 'E')
@@ -83,6 +85,8 @@ void	free_destroy_all(t_mlx *mlx)
 		mlx_destroy_image(mlx->con, mlx->wall);
 	if (mlx->floor)
 		mlx_destroy_image(mlx->con, mlx->floor);
+	if (mlx->enemy)
+		mlx_destroy_image(mlx->con, mlx->enemy);
 	if (mlx->win)
 		mlx_destroy_window(mlx->con, mlx->win);
 	if (mlx->con)
@@ -98,15 +102,17 @@ void	move(t_mlx *mlx, const int dir, const int coord)
 		step = &mlx->tileset[mlx->play_pos[1]][mlx->play_pos[0] + dir];
 	else
 		step = &mlx->tileset[mlx->play_pos[1] + dir][mlx->play_pos[0]];
-	if (*step == '1' || (*step == 'E' && mlx->col_left))
+	if (*step == '1' || ((*step == 'E' || *step == 'X') && mlx->col_left))
 		return ;
 	if (*step == 'E')
 		free_destroy_all(mlx);
 	if (*step == 'C')
 		--mlx->col_left;
+	update_sprite(mlx);
 	*step = 'P';
 	mlx->tileset[mlx->play_pos[1]][mlx->play_pos[0]] = '0';
 	mlx->play_pos[coord] += dir;
 	++mlx->moves;
 	draw_score(*mlx);
+	move_enemies(mlx);
 }

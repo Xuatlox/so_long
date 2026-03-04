@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   so_long_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/02 17:16:28 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:10:05 by ansimonn         ###   ########.fr       */
+/*   Created: 2026/02/02 18:46:29 by ansimonn          #+#    #+#             */
+/*   Updated: 2026/03/04 18:08:26 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "so_long_bonus.h"
 
 static void	window_hook(const int event, void *param)
 {
@@ -40,6 +40,7 @@ static void	init(t_mlx *mlx, char **av)
 	int	height;
 
 	mlx->tileset = check_map(&mlx->col_left, av[1]);
+	mlx->col_max = mlx->col_left;
 	mlx->info.title = "So Long";
 	mlx->info.width = TILESIZE * ft_strlen(mlx->tileset[0]);
 	height = 0;
@@ -53,10 +54,12 @@ static void	init(t_mlx *mlx, char **av)
 	mlx->col = mlx_new_image_from_file(mlx->con, "col.png", 0, 0);
 	mlx->exit = mlx_new_image_from_file(mlx->con, "exit.png", 0, 0);
 	mlx->floor = mlx_new_image_from_file(mlx->con, "floor.png", 0, 0);
-	if (!mlx->floor || !mlx->exit || !mlx->col || !mlx->wall
+	mlx->enemy = mlx_new_image_from_file(mlx->con, "enemy.png", 0, 0);
+	if (!mlx->enemy || !mlx->floor || !mlx->exit || !mlx->col || !mlx->wall
 		|| !mlx->player || !mlx->win)
 		free_destroy_all(mlx);
 	mlx->bg.rgba = 0x00000000;
+	mlx->text.rgba = 0x00d9901a;
 	mlx->moves = 0;
 }
 

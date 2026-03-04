@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map2.c                                             :+:      :+:    :+:   */
+/*   map2_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 13:19:03 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:20:26 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/04 18:07:10 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "so_long_bonus.h"
 
 void	error(const char *message, char **map)
 {
@@ -74,7 +74,7 @@ void	check_charset(char **map)
 		while (map[i][j])
 		{
 			if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'E'
-				&& map[i][j] != 'P' && map[i][j] != 'C')
+				&& map[i][j] != 'P' && map[i][j] != 'C' && map[i][j] != 'X')
 			{
 				error("Invalid character in map", map);
 			}
