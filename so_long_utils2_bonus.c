@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long_utils2.c                                   :+:      :+:    :+:   */
+/*   so_long_utils2_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/02 14:42:00 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 17:20:52 by ansimonn         ###   ########.fr       */
+/*   Created: 2026/03/05 10:35:15 by ansimonn          #+#    #+#             */
+/*   Updated: 2026/03/05 13:29:09 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,52 +29,51 @@ void	update_sprite(t_mlx *mlx)
 static void	enemy_attract(t_mlx *mlx, const int i, const int j)
 {
 	struct timeval	tv;
+	char			*step;
 
 	gettimeofday(&tv, NULL);
-	if (tv.tv_usec % 2 == 0)
+	step = NULL;
+	if (tv.tv_usec % 2 == 0 && mlx->play_pos[1] < i)
+		step = &mlx->tileset[i - 1][j];
+	else if (tv.tv_usec % 2 == 0 && mlx->play_pos[1] > i)
+		step = &mlx->tileset[i + 1][j];
+	else if (tv.tv_usec % 2 == 1 && mlx->play_pos[0] < j)
+		step = &mlx->tileset[i][j - 1];
+	else if (tv.tv_usec % 2 == 1 && mlx->play_pos[0] > j)
+		step = &mlx->tileset[i][j + 1];
+	if (!step)
+		return ;
+	if (*step == 'P')
 	{
-		if (mlx->play_pos[1] < i && mlx->tileset[i - 1][j] == '0')
-			mlx->tileset[i - 1][j] = 'S';
-		else if (mlx->play_pos[1] > i && mlx->tileset[i + 1][j] == '0')
-			mlx->tileset[i + 1][j] = 'S';
-		else
-			return ;
+		*step = 'S';
+		free_destroy_all(mlx, 0);
 	}
-	else
-	{
-		if (mlx->play_pos[0] < j && mlx->tileset[i][j - 1] == '0')
-			mlx->tileset[i][j - 1] = 'S';
-		else if (mlx->play_pos[0] > j && mlx->tileset[i][j + 1] == '0')
-			mlx->tileset[i][j + 1] = 'S';
-		else
-			return ;
-	}
+	if (*step != '0')
+		return ;
+	*step = 'S';
 	mlx->tileset[i][j] = '0';
 }
 
 static void	enemy_flee(t_mlx *mlx, const int i, const int j)
 {
 	struct timeval	tv;
+	char			*step;
 
 	gettimeofday(&tv, NULL);
-	if (tv.tv_usec % 2 == 0)
-	{
-		if (mlx->play_pos[1] < i && mlx->tileset[i + 1][j] == '0')
-			mlx->tileset[i + 1][j] = 'S';
-		else if (mlx->play_pos[1] > i && mlx->tileset[i - 1][j] == '0')
-			mlx->tileset[i - 1][j] = 'S';
-		else
-			return ;
-	}
-	else
-	{
-		if (mlx->play_pos[0] < j && mlx->tileset[i][j + 1] == '0')
-			mlx->tileset[i][j + 1] = 'S';
-		else if (mlx->play_pos[0] > j && mlx->tileset[i][j - 1] == '0')
-			mlx->tileset[i][j - 1] = 'S';
-		else
-			return ;
-	}
+	step = NULL;
+	if (tv.tv_usec % 2 == 0 && mlx->play_pos[1] < i)
+		step = &mlx->tileset[i + 1][j];
+	else if (tv.tv_usec % 2 == 0 && mlx->play_pos[1] > i)
+		step = &mlx->tileset[i - 1][j];
+	else if (tv.tv_usec % 2 == 1 && mlx->play_pos[0] < j)
+		step = &mlx->tileset[i][j + 1];
+	else if (tv.tv_usec % 2 == 1 && mlx->play_pos[0] > j)
+		step = &mlx->tileset[i][j - 1];
+	if (!step)
+		return ;
+	if (*step != '0')
+		return ;
+	*step = 'S';
 	mlx->tileset[i][j] = '0';
 }
 

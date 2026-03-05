@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 12:45:40 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:19:53 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 11:17:08 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static void	fill_map(char ***content, const char *map)
 		(*content)[i] = ret;
 		++i;
 	}
+	close(fd);
 }
 
 static int	check_char(char **map, const char c)

@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 17:18:47 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:17:33 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 13:13:16 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_mlx
 char	**check_map(int *col_left, const char *map);
 void	check_rect(char **tileset, int len);
 void	check_walls(char **tileset, int len);
-void	error(const char *message, char **map);
+void	error(char *message, char **map);
 int		get_len(const char *map);
 void	check_charset(char **map);
 int		ft_strlen(char *str);

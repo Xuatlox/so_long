@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:46:29 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:08:26 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 11:06:45 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	init(t_mlx *mlx, char **av)
 	mlx->enemy = mlx_new_image_from_file(mlx->con, "enemy.png", 0, 0);
 	if (!mlx->enemy || !mlx->floor || !mlx->exit || !mlx->col || !mlx->wall
 		|| !mlx->player || !mlx->win)
-		free_destroy_all(mlx);
+		free_destroy_all(mlx, -1);
 	mlx->bg.rgba = 0x00000000;
 	mlx->text.rgba = 0x00d9901a;
 	mlx->moves = 0;
@@ -81,7 +81,7 @@ int	main(const int ac, char **av)
 		return (0);
 	mlx.con = mlx_init();
 	if (!mlx.con)
-		free_destroy_all(&mlx);
+		free_destroy_all(&mlx, -1);
 	mlx.info = (mlx_window_create_info){0};
 	mlx.play_pos[0] = 0;
 	mlx.play_pos[1] = 0;
@@ -90,5 +90,5 @@ int	main(const int ac, char **av)
 	mlx_on_event(mlx.con, mlx.win, MLX_WINDOW_EVENT, window_hook, mlx.con);
 	mlx_add_loop_hook(mlx.con, update, &mlx);
 	mlx_loop(mlx.con);
-	free_destroy_all(&mlx);
+	free_destroy_all(&mlx, -2);
 }

@@ -6,16 +6,16 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 13:19:03 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:07:10 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 13:12:20 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long_bonus.h"
 
-void	error(const char *message, char **map)
+void	error(char *message, char **map)
 {
 	write(STDERR_FILENO, "Error\n", 6);
-	perror(message);
+	write(STDERR_FILENO, message, ft_strlen(message));
 	if (map)
 		desalloc(map);
 	exit(EXIT_FAILURE);
@@ -91,7 +91,9 @@ int	check_path(char **tileset, const int pos_x, const int pos_y)
 	ret = 0;
 	if (tileset[pos_y][pos_x] == '1')
 		return (0);
-	if (tileset[pos_y][pos_x] == 'C' || tileset[pos_y][pos_x] == 'E')
+	if (tileset[pos_y][pos_x] == 'E')
+		return (1);
+	if (tileset[pos_y][pos_x] == 'C')
 		ret = 1;
 	tileset[pos_y][pos_x] = '1';
 	return (check_path(tileset, pos_x + 1, pos_y)

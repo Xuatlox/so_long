@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long_utils.c                                    :+:      :+:    :+:   */
+/*   so_long_utils_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/13 10:53:32 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:08:52 by ansimonn         ###   ########.fr       */
+/*   Created: 2026/03/05 10:35:15 by ansimonn          #+#    #+#             */
+/*   Updated: 2026/03/05 13:28:50 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,14 @@ void	draw_score(const t_mlx mlx)
 	free(score);
 }
 
-void	free_destroy_all(t_mlx *mlx)
+void	free_destroy_all(t_mlx *mlx, int success)
 {
+	if (success == 1)
+		write(STDOUT_FILENO, "/*SUCCESS*\\\n", 12);
+	else if (success == 0)
+		write(STDOUT_FILENO, "/*FAILURE*\\\n", 12);
+	else if (success == -1)
+		write(STDERR_FILENO, "Init error\n", 11);
 	if (mlx->tileset)
 		desalloc(mlx->tileset);
 	if (mlx->player)
@@ -102,10 +108,12 @@ void	move(t_mlx *mlx, const int dir, const int coord)
 		step = &mlx->tileset[mlx->play_pos[1]][mlx->play_pos[0] + dir];
 	else
 		step = &mlx->tileset[mlx->play_pos[1] + dir][mlx->play_pos[0]];
-	if (*step == '1' || ((*step == 'E' || *step == 'X') && mlx->col_left))
+	if (*step == '1' || (*step == 'E' && mlx->col_left))
 		return ;
 	if (*step == 'E')
-		free_destroy_all(mlx);
+		free_destroy_all(mlx, 1);
+	if (*step == 'X' && mlx->col_left)
+		free_destroy_all(mlx, 0);
 	if (*step == 'C')
 		--mlx->col_left;
 	update_sprite(mlx);

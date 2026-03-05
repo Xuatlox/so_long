@@ -6,16 +6,16 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 13:19:03 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/04 18:20:26 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 13:12:39 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	error(const char *message, char **map)
+void	error(char *message, char **map)
 {
 	write(STDERR_FILENO, "Error\n", 6);
-	perror(message);
+	write(STDERR_FILENO, message, ft_strlen(message));
 	if (map)
 		desalloc(map);
 	exit(EXIT_FAILURE);
