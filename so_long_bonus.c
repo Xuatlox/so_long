@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:46:29 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/05 11:06:45 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 16:32:39 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int	main(const int ac, char **av)
 	t_mlx	mlx;
 
 	if (ac != 2)
-		return (0);
+		error("Invalid number of arguments", NULL);
+	check_ber(av[1]);
 	mlx.con = mlx_init();
 	if (!mlx.con)
 		free_destroy_all(&mlx, -1);

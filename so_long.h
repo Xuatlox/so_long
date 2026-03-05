@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 17:18:47 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/05 13:13:16 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 16:23:17 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void	draw_score(t_mlx mlx);
 char	*ft_itoa(int n);
 char	*ft_strdup(char *s);
 void	draw_bg(t_mlx mlx);
+void	check_ber(const char *str);
 
 #endif

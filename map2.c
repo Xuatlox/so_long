@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 13:19:03 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/05 13:12:39 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 17:09:55 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	error(char *message, char **map)
 {
 	write(STDERR_FILENO, "Error\n", 6);
 	write(STDERR_FILENO, message, ft_strlen(message));
+	write(STDERR_FILENO, "\n", 1);
 	if (map)
 		desalloc(map);
 	exit(EXIT_FAILURE);
@@ -91,7 +92,12 @@ int	check_path(char **tileset, const int pos_x, const int pos_y)
 	ret = 0;
 	if (tileset[pos_y][pos_x] == '1')
 		return (0);
-	if (tileset[pos_y][pos_x] == 'C' || tileset[pos_y][pos_x] == 'E')
+	if (tileset[pos_y][pos_x] == 'E')
+	{
+		tileset[pos_y][pos_x] = '1';
+		return (1);
+	}
+	if (tileset[pos_y][pos_x] == 'C')
 		ret = 1;
 	tileset[pos_y][pos_x] = '1';
 	return (check_path(tileset, pos_x + 1, pos_y)

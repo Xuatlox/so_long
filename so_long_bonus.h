@@ -6,7 +6,7 @@
 /*   By: ansimonn <ansimonn@student.42angouleme.f>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 10:35:15 by ansimonn          #+#    #+#             */
-/*   Updated: 2026/03/05 13:29:59 by ansimonn         ###   ########.fr       */
+/*   Updated: 2026/03/05 16:23:52 by ansimonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ char	*ft_strdup(char *s);
 void	draw_bg(t_mlx mlx);
 void	update_sprite(t_mlx *mlx);
 void	move_enemies(t_mlx *mlx);
+void	check_ber(const char *str);
 
 #endif
